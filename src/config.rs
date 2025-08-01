@@ -16,8 +16,7 @@ use std::path::PathBuf;
 /// This structure contains all configuration options for Zynapse,
 /// organized by functional areas.
 /// この構造体は機能領域別に整理されたZynapseのすべての設定オプションを含みます。
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Config {
     /// Storage configuration
     /// ストレージ設定
@@ -186,7 +185,6 @@ pub struct LoggingConfig {
     pub colored: bool,
 }
 
-
 impl Default for StorageConfig {
     fn default() -> Self {
         let home_dir = dirs::home_dir().unwrap_or_else(|| PathBuf::from("."));
@@ -337,9 +335,8 @@ impl Config {
             ZynapseError::io_error(e, format!("Failed to read config file: {path:?}"))
         })?;
 
-        let config: Self = toml::from_str(&content).map_err(|e| {
-            ZynapseError::config_error(format!("Invalid TOML in config file: {e}"))
-        })?;
+        let config: Self = toml::from_str(&content)
+            .map_err(|e| ZynapseError::config_error(format!("Invalid TOML in config file: {e}")))?;
 
         config.validate()?;
         Ok(config)
@@ -380,9 +377,8 @@ impl Config {
                 .map_err(|e| ZynapseError::io_error(e, "Failed to create config directory"))?;
         }
 
-        let content = toml::to_string(self).map_err(|e| {
-            ZynapseError::config_error(format!("Failed to serialize config: {e}"))
-        })?;
+        let content = toml::to_string(self)
+            .map_err(|e| ZynapseError::config_error(format!("Failed to serialize config: {e}")))?;
 
         std::fs::write(path, content).map_err(|e| {
             ZynapseError::io_error(e, format!("Failed to write config file: {path:?}"))

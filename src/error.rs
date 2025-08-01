@@ -271,7 +271,8 @@ impl ZynapseError {
     /// let error = ZynapseError::config_error("Invalid config");
     /// assert!(!error.is_recoverable()); // Configuration errors typically aren't recoverable
     /// ```
-    #[must_use] pub const fn is_recoverable(&self) -> bool {
+    #[must_use]
+    pub const fn is_recoverable(&self) -> bool {
         match self {
             Self::Io { .. } => true,
             Self::Configuration { .. } => false,
@@ -304,7 +305,8 @@ impl ZynapseError {
     /// let error = ZynapseError::config_error("Invalid config");
     /// assert_eq!(error.category(), "Configuration");
     /// ```
-    #[must_use] pub const fn category(&self) -> &'static str {
+    #[must_use]
+    pub const fn category(&self) -> &'static str {
         match self {
             Self::Io { .. } => "I/O",
             Self::Configuration { .. } => "Configuration",
