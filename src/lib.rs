@@ -3,7 +3,7 @@
 //!
 //! Zynapse is a personal knowledge management system that evolves beyond traditional
 //! Zettelkasten by implementing synapse-like connections that strengthen over time.
-//! Zynapseは従来のZettelkastenを超えて進化する個人知識管理システムで、
+//! `Zynapseは従来のZettelkastenを超えて進化する個人知識管理システムで`、
 //! 時間とともに強化されるシナプス的接続を実装しています。
 //!
 //! # Architecture Overview / アーキテクチャ概要
@@ -98,27 +98,27 @@ pub mod error;
 // #[cfg(feature = "tui")]
 // pub mod tui;
 
-// Phase 2 modules - Learning and analytics
-// Phase 2モジュール - 学習と分析
-#[cfg(feature = "analytics")]
-pub mod analytics;
+// // Phase 2 modules - Learning and analytics
+// // Phase 2モジュール - 学習と分析
+// #[cfg(feature = "analytics")]
+// pub mod analytics;
 
-#[cfg(feature = "learning")]
-pub mod learning;
+// #[cfg(feature = "learning")]
+// pub mod learning;
 
-#[cfg(feature = "visualization")]
-pub mod visualization;
+// #[cfg(feature = "visualization")]
+// pub mod visualization;
 
-// Phase 3 modules - AI and emergence
-// Phase 3モジュール - AIと創発
-#[cfg(feature = "ai")]
-pub mod ai;
+// // Phase 3 modules - AI and emergence
+// // Phase 3モジュール - AIと創発
+// #[cfg(feature = "ai")]
+// pub mod ai;
 
-#[cfg(feature = "emergence")]
-pub mod emergence;
+// #[cfg(feature = "emergence")]
+// pub mod emergence;
 
-#[cfg(feature = "serendipity")]
-pub mod serendipity;
+// #[cfg(feature = "serendipity")]
+// pub mod serendipity;
 
 // Configuration and utilities
 // 設定とユーティリティ
@@ -151,8 +151,8 @@ pub const DESCRIPTION: &str = env!("CARGO_PKG_DESCRIPTION");
 /// let version = version_info();
 /// assert!(version.contains("zynapse"));
 /// ```
-pub fn version_info() -> String {
-    format!("{} {} - {}", NAME, VERSION, DESCRIPTION)
+#[must_use] pub fn version_info() -> String {
+    format!("{NAME} {VERSION} - {DESCRIPTION}")
 }
 
 /// Initialize the Zynapse library with default configuration
@@ -185,7 +185,7 @@ pub fn initialize() -> Result<()> {
     // ロギング初期化
     env_logger::init();
 
-    log::info!("Initializing Zynapse {}", VERSION);
+    log::info!("Initializing Zynapse {VERSION}");
 
     // Validate runtime environment
     // ランタイム環境の検証
@@ -204,7 +204,7 @@ fn validate_environment() -> Result<()> {
     // Check Rust version compatibility
     // Rustバージョン互換性チェック
     let rust_version = std::env::var("RUSTC_VERSION").unwrap_or_else(|_| "unknown".to_string());
-    log::debug!("Rust version: {}", rust_version);
+    log::debug!("Rust version: {rust_version}");
 
     // Validate feature flag consistency
     // 機能フラグの一貫性検証
