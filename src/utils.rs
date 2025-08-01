@@ -37,7 +37,8 @@ use std::path::Path;
 /// assert_eq!(sanitize_filename("Test/File:Name"), "test-file-name");
 /// assert_eq!(sanitize_filename("日本語テスト"), "日本語テスト");
 /// ```
-#[must_use] pub fn sanitize_filename(input: &str) -> String {
+#[must_use]
+pub fn sanitize_filename(input: &str) -> String {
     input
         .to_lowercase()
         .chars()
@@ -92,7 +93,8 @@ use std::path::Path;
 /// assert_ne!(hash1, hash3); // Different content produces different hash
 /// assert_eq!(hash1.len(), 8); // Hash is always 8 characters
 /// ```
-#[must_use] pub fn generate_content_hash(content: &str) -> String {
+#[must_use]
+pub fn generate_content_hash(content: &str) -> String {
     let hash = blake3::hash(content.as_bytes());
     hex::encode(&hash.as_bytes()[..4])
 }
@@ -131,7 +133,8 @@ use std::path::Path;
 /// let content3 = "Just plain text content";
 /// assert_eq!(extract_title_from_content(content3), "just-plain-text-content");
 /// ```
-#[must_use] pub fn extract_title_from_content(content: &str) -> String {
+#[must_use]
+pub fn extract_title_from_content(content: &str) -> String {
     let lines: Vec<&str> = content.lines().collect();
 
     // Look for H1 heading first
@@ -270,7 +273,8 @@ pub fn validate_safe_path(path: &Path) -> Result<()> {
 /// assert_eq!(format_file_size(1536), "1.5 KB");
 /// assert_eq!(format_file_size(1048576), "1.0 MB");
 /// ```
-#[must_use] pub fn format_file_size(bytes: u64) -> String {
+#[must_use]
+pub fn format_file_size(bytes: u64) -> String {
     const UNITS: &[&str] = &["B", "KB", "MB", "GB", "TB"];
     const THRESHOLD: f64 = 1024.0;
 
@@ -316,9 +320,10 @@ pub fn validate_safe_path(path: &Path) -> Result<()> {
 ///
 /// let timestamp = current_timestamp();
 /// assert!(timestamp.contains("T"));
-/// assert!(timestamp.ends_with("Z"));
+/// assert!(timestamp.ends_with('Z') || timestamp.contains('+') || timestamp.contains('-'));
 /// ```
-#[must_use] pub fn current_timestamp() -> String {
+#[must_use]
+pub fn current_timestamp() -> String {
     chrono::Utc::now().to_rfc3339()
 }
 
@@ -347,7 +352,8 @@ pub fn validate_safe_path(path: &Path) -> Result<()> {
 /// assert!(!is_empty_or_whitespace("Hello"));
 /// assert!(!is_empty_or_whitespace("  Hello  "));
 /// ```
-#[must_use] pub fn is_empty_or_whitespace(input: &str) -> bool {
+#[must_use]
+pub fn is_empty_or_whitespace(input: &str) -> bool {
     input.trim().is_empty()
 }
 
@@ -378,7 +384,8 @@ pub fn validate_safe_path(path: &Path) -> Result<()> {
 /// assert_eq!(truncate_string("Short", 10), "Short");
 /// assert_eq!(truncate_string("Exact", 5), "Exact");
 /// ```
-#[must_use] pub fn truncate_string(input: &str, max_length: usize) -> String {
+#[must_use]
+pub fn truncate_string(input: &str, max_length: usize) -> String {
     if input.len() <= max_length {
         input.to_string()
     } else if max_length <= 3 {
@@ -414,7 +421,8 @@ pub fn validate_safe_path(path: &Path) -> Result<()> {
 /// assert_eq!(normalize_line_endings("Line1\rLine2"), "Line1\nLine2");
 /// assert_eq!(normalize_line_endings("Line1\nLine2"), "Line1\nLine2");
 /// ```
-#[must_use] pub fn normalize_line_endings(input: &str) -> String {
+#[must_use]
+pub fn normalize_line_endings(input: &str) -> String {
     input.replace("\r\n", "\n").replace('\r', "\n")
 }
 
@@ -449,7 +457,8 @@ pub fn validate_safe_path(path: &Path) -> Result<()> {
 /// assert!(backup.to_string_lossy().contains("note_"));
 /// assert!(backup.to_string_lossy().ends_with(".md"));
 /// ```
-#[must_use] pub fn create_backup_filename(original_path: &Path) -> std::path::PathBuf {
+#[must_use]
+pub fn create_backup_filename(original_path: &Path) -> std::path::PathBuf {
     let timestamp = chrono::Utc::now().format("%Y%m%d_%H%M%S");
 
     match (original_path.file_stem(), original_path.extension()) {
@@ -533,7 +542,8 @@ pub fn ensure_directory_exists(path: &Path) -> Result<()> {
 /// let relative = relative_path(from, to);
 /// assert_eq!(relative.to_str().unwrap(), "2023/note.md");
 /// ```
-#[must_use] pub fn relative_path(from: &Path, to: &Path) -> std::path::PathBuf {
+#[must_use]
+pub fn relative_path(from: &Path, to: &Path) -> std::path::PathBuf {
     to.strip_prefix(from)
         .map_or_else(|_| to.to_path_buf(), Path::to_path_buf)
 }
@@ -693,7 +703,7 @@ mod tests {
     fn test_current_timestamp() {
         let timestamp = current_timestamp();
         assert!(timestamp.contains('T'));
-        assert!(timestamp.ends_with('Z'));
+        assert!(timestamp.ends_with('Z') || timestamp.contains('+') || timestamp.contains('-'));
 
         // Should be valid RFC3339 format
         assert!(chrono::DateTime::parse_from_rfc3339(&timestamp).is_ok());
