@@ -1,5 +1,5 @@
 //! Zynapse CLI Application - Personal Knowledge Management System
-//! ZynapseCLIアプリケーション - 個人知識管理システム
+//! `ZynapseCLIアプリケーション` - 個人知識管理システム
 //!
 //! Zynapse is a CLI/TUI-based Zettelkasten tool that evolves beyond traditional
 //! note-taking by implementing synapse-like connections that strengthen over time.
@@ -57,7 +57,7 @@
 use zynapse::{initialize, Result};
 
 /// Main entry point for the Zynapse CLI application
-/// ZynapseCLIアプリケーションのメインエントリーポイント
+/// `ZynapseCLIアプリケーションのメインエントリーポイント`
 ///
 /// This function initializes the Zynapse library, processes command-line arguments,
 /// and dispatches to the appropriate functionality based on the selected features.

@@ -38,7 +38,7 @@ fn storage_create_note_benchmark(c: &mut Criterion) {
             // TODO: Implement note creation benchmark once storage is available
             // ストレージ実装後にノート作成ベンチマーク実装予定
             black_box("create_note_placeholder")
-        })
+        });
     });
 }
 
@@ -55,7 +55,7 @@ fn storage_read_note_benchmark(c: &mut Criterion) {
             // TODO: Implement note reading benchmark
             // ノート読み取りベンチマーク実装予定
             black_box("read_note_placeholder")
-        })
+        });
     });
 }
 
@@ -72,7 +72,7 @@ fn storage_bulk_operations_benchmark(c: &mut Criterion) {
             // TODO: Implement bulk operations benchmark
             // 一括操作ベンチマーク実装予定
             black_box("bulk_ops_placeholder")
-        })
+        });
     });
 }
 
@@ -89,7 +89,7 @@ fn storage_filesystem_benchmark(c: &mut Criterion) {
             // TODO: Implement filesystem performance benchmark
             // ファイルシステムパフォーマンスベンチマーク実装予定
             black_box("filesystem_placeholder")
-        })
+        });
     });
 }
 

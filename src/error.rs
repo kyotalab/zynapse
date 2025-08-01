@@ -125,11 +125,11 @@ pub enum ZynapseError {
 }
 
 /// Specialized Result type for Zynapse operations
-/// Zynapse操作用の特化されたResult型
+/// `Zynapse操作用の特化されたResult型`
 ///
 /// This type alias provides a convenient way to work with Results that
-/// can return ZynapseError. It's used throughout the codebase.
-/// この型エイリアスはZynapseErrorを返す可能性のあるResultを
+/// can return `ZynapseError`. It's used throughout the codebase.
+/// `この型エイリアスはZynapseErrorを返す可能性のあるResultを`
 /// 扱う便利な方法を提供します。コードベース全体で使用されます。
 ///
 /// # Examples
@@ -271,22 +271,22 @@ impl ZynapseError {
     /// let error = ZynapseError::config_error("Invalid config");
     /// assert!(!error.is_recoverable()); // Configuration errors typically aren't recoverable
     /// ```
-    pub fn is_recoverable(&self) -> bool {
+    #[must_use] pub const fn is_recoverable(&self) -> bool {
         match self {
-            ZynapseError::Io { .. } => true,
-            ZynapseError::Configuration { .. } => false,
-            ZynapseError::NoteNotFound { .. } => false,
-            ZynapseError::InvalidContent { .. } => false,
+            Self::Io { .. } => true,
+            Self::Configuration { .. } => false,
+            Self::NoteNotFound { .. } => false,
+            Self::InvalidContent { .. } => false,
             #[cfg(feature = "search")]
-            ZynapseError::Search { .. } => true,
+            Self::Search { .. } => true,
             #[cfg(feature = "basic-storage")]
-            ZynapseError::Storage { .. } => true,
-            ZynapseError::Serialization { .. } => false,
+            Self::Storage { .. } => true,
+            Self::Serialization { .. } => false,
             #[cfg(feature = "cli")]
-            ZynapseError::Cli { .. } => false,
+            Self::Cli { .. } => false,
             #[cfg(feature = "tui")]
-            ZynapseError::Tui { .. } => true,
-            ZynapseError::Internal { .. } => false,
+            Self::Tui { .. } => true,
+            Self::Internal { .. } => false,
         }
     }
 
@@ -304,22 +304,22 @@ impl ZynapseError {
     /// let error = ZynapseError::config_error("Invalid config");
     /// assert_eq!(error.category(), "Configuration");
     /// ```
-    pub fn category(&self) -> &'static str {
+    #[must_use] pub const fn category(&self) -> &'static str {
         match self {
-            ZynapseError::Io { .. } => "I/O",
-            ZynapseError::Configuration { .. } => "Configuration",
-            ZynapseError::NoteNotFound { .. } => "NotFound",
-            ZynapseError::InvalidContent { .. } => "InvalidContent",
+            Self::Io { .. } => "I/O",
+            Self::Configuration { .. } => "Configuration",
+            Self::NoteNotFound { .. } => "NotFound",
+            Self::InvalidContent { .. } => "InvalidContent",
             #[cfg(feature = "search")]
-            ZynapseError::Search { .. } => "Search",
+            Self::Search { .. } => "Search",
             #[cfg(feature = "basic-storage")]
-            ZynapseError::Storage { .. } => "Storage",
-            ZynapseError::Serialization { .. } => "Serialization",
+            Self::Storage { .. } => "Storage",
+            Self::Serialization { .. } => "Serialization",
             #[cfg(feature = "cli")]
-            ZynapseError::Cli { .. } => "CLI",
+            Self::Cli { .. } => "CLI",
             #[cfg(feature = "tui")]
-            ZynapseError::Tui { .. } => "TUI",
-            ZynapseError::Internal { .. } => "Internal",
+            Self::Tui { .. } => "TUI",
+            Self::Internal { .. } => "Internal",
         }
     }
 }
@@ -388,7 +388,7 @@ mod tests {
     #[test]
     fn test_error_display() {
         let error = ZynapseError::invalid_content("Empty content not allowed");
-        let error_string = format!("{}", error);
+        let error_string = format!("{error}");
         assert!(error_string.contains("Invalid note content"));
         assert!(error_string.contains("Empty content not allowed"));
     }
