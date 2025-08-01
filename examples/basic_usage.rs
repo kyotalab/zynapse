@@ -1,8 +1,8 @@
 //! Basic usage example for Zynapse CLI
-//! ZynapseCLIの基本使用例
+//! `ZynapseCLIの基本使用例`
 //!
 //! This example demonstrates the basic CLI functionality of Zynapse.
-//! この例はZynapseの基本CLI機能を実演します。
+//! `この例はZynapseの基本CLI機能を実演します`。
 
 #[cfg(feature = "cli")]
 fn main() {

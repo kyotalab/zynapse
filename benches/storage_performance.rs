@@ -18,7 +18,7 @@ fn search_basic_benchmark(c: &mut Criterion) {
             // TODO: Implement search benchmark once search functionality is available
             // 検索機能実装後にベンチマーク実装予定
             black_box("search_placeholder")
-        })
+        });
     });
 }
 
@@ -30,7 +30,7 @@ fn search_large_dataset_benchmark(c: &mut Criterion) {
             // TODO: Implement large dataset benchmark
             // 大規模データセットベンチマーク実装予定
             black_box("large_search_placeholder")
-        })
+        });
     });
 }
 
@@ -42,7 +42,7 @@ fn search_fulltext_benchmark(c: &mut Criterion) {
             // TODO: Implement full-text search benchmark
             // 全文検索ベンチマーク実装予定
             black_box("fulltext_search_placeholder")
-        })
+        });
     });
 }
 

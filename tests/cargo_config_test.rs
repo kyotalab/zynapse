@@ -10,7 +10,7 @@ use std::str;
 #[test]
 fn test_dependencies_compile() {
     let output = Command::new("cargo")
-        .args(&["check", "--all-features"])
+        .args(["check", "--all-features"])
         .output()
         .expect("Failed to run cargo check");
 
@@ -26,7 +26,7 @@ fn test_dependencies_compile() {
 #[test]
 fn test_minimal_features() {
     let output = Command::new("cargo")
-        .args(&["check", "--no-default-features"])
+        .args(["check", "--no-default-features"])
         .output()
         .expect("Failed to run cargo check");
 
@@ -45,7 +45,7 @@ fn test_phase_features() {
 
     for phase in &phases {
         let output = Command::new("cargo")
-            .args(&["check", "--features", phase])
+            .args(["check", "--features", phase])
             .output()
             .expect("Failed to run cargo check");
 
@@ -67,7 +67,7 @@ fn test_phase_features() {
 #[test]
 fn test_lint_configuration() {
     let output = Command::new("cargo")
-        .args(&["clippy", "--all-features", "--", "-D", "warnings"])
+        .args(["clippy", "--all-features", "--", "-D", "warnings"])
         .output()
         .expect("Failed to run cargo clippy");
 
@@ -85,7 +85,7 @@ fn test_lint_configuration() {
 #[test]
 fn test_documentation_build() {
     let output = Command::new("cargo")
-        .args(&["doc", "--no-deps", "--all-features"])
+        .args(["doc", "--no-deps", "--all-features"])
         .output()
         .expect("Failed to run cargo doc");
 
@@ -101,7 +101,7 @@ fn test_documentation_build() {
 #[test]
 fn test_binary_target() {
     let output = Command::new("cargo")
-        .args(&["build", "--bin", "zynapse", "--features", "cli"])
+        .args(["build", "--bin", "zynapse", "--features", "cli"])
         .output()
         .expect("Failed to build binary");
 
@@ -119,7 +119,7 @@ fn test_profile_configurations() {
     // Test release profile optimization
     // リリースプロファイル最適化テスト
     let output = Command::new("cargo")
-        .args(&["build", "--release", "--features", "phase1"])
+        .args(["build", "--release", "--features", "phase1"])
         .output()
         .expect("Failed to build release");
 
@@ -135,7 +135,7 @@ fn test_profile_configurations() {
 #[test]
 fn test_benchmark_compilation() {
     let output = Command::new("cargo")
-        .args(&["check", "--benches", "--features", "search,basic-storage"])
+        .args(["check", "--benches", "--features", "search,basic-storage"])
         .output()
         .expect("Failed to check benchmarks");
 
@@ -153,7 +153,7 @@ fn test_benchmark_compilation() {
 #[test]
 fn test_rust_version_compatibility() {
     let output = Command::new("rustc")
-        .args(&["--version"])
+        .args(["--version"])
         .output()
         .expect("Failed to get Rust version");
 
@@ -171,8 +171,7 @@ fn test_rust_version_compatibility() {
             // rust-version要件（1.70.0）との照合
             assert!(
                 major > 1 || (major == 1 && minor >= 70),
-                "Rust version {} is below required 1.70.0",
-                version_part
+                "Rust version {version_part} is below required 1.70.0"
             );
         }
     }
