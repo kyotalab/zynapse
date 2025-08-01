@@ -364,6 +364,14 @@ impl Config {
     /// # 引数
     ///
     /// * `path` - Path where to save the configuration / 設定を保存するパス
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if:
+    /// 以下の場合にエラーを返します：
+    /// - The parent directory cannot be created
+    /// - The configuration cannot be serialized to TOML
+    /// - The file cannot be written to disk
     pub fn save_to_file(&self, path: &std::path::Path) -> Result<()> {
         // Create parent directory if it doesn't exist
         // 親ディレクトリが存在しない場合は作成
@@ -388,6 +396,19 @@ impl Config {
     ///
     /// Checks that all configuration values are valid and consistent.
     /// すべての設定値が有効で一貫していることをチェックします。
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if:
+    /// 以下の場合にエラーを返します：
+    /// - `max_file_size` is zero
+    /// - `retain_count` is zero
+    /// - `max_results` is zero (when search feature is enabled)
+    /// - `timeout_ms` is zero (when search feature is enabled)
+    /// - `editor` is empty (when CLI feature is enabled)
+    /// - `max_list_items` is zero (when CLI feature is enabled)
+    /// - `frame_rate` is zero or exceeds 120 (when TUI feature is enabled)
+    /// - `logging.level` is not a valid log level
     pub fn validate(&self) -> Result<()> {
         // Validate storage configuration
         // ストレージ設定を検証

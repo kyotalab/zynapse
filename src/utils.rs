@@ -278,6 +278,9 @@ pub fn validate_safe_path(path: &Path) -> Result<()> {
         return "0 B".to_string();
     }
 
+    // Use explicit casting with allow to acknowledge precision loss
+    // 精度損失を承知で明示的キャストを使用
+    #[allow(clippy::cast_precision_loss)]
     let bytes_f = bytes as f64;
     let mut size = bytes_f;
     let mut unit_index = 0;
@@ -313,7 +316,7 @@ pub fn validate_safe_path(path: &Path) -> Result<()> {
 ///
 /// let timestamp = current_timestamp();
 /// assert!(timestamp.contains("T"));
-/// assert!(timestamp.ends_with('Z') || timestamp.contains('+') || timestamp.contains('-'));
+/// assert!(timestamp.ends_with("Z"));
 /// ```
 #[must_use] pub fn current_timestamp() -> String {
     chrono::Utc::now().to_rfc3339()
@@ -531,10 +534,8 @@ pub fn ensure_directory_exists(path: &Path) -> Result<()> {
 /// assert_eq!(relative.to_str().unwrap(), "2023/note.md");
 /// ```
 #[must_use] pub fn relative_path(from: &Path, to: &Path) -> std::path::PathBuf {
-    match to.strip_prefix(from) {
-        Ok(relative) => relative.to_path_buf(),
-        Err(_) => to.to_path_buf(),
-    }
+    to.strip_prefix(from)
+        .map_or_else(|_| to.to_path_buf(), Path::to_path_buf)
 }
 
 #[cfg(test)]
@@ -692,7 +693,7 @@ mod tests {
     fn test_current_timestamp() {
         let timestamp = current_timestamp();
         assert!(timestamp.contains('T'));
-        assert!(timestamp.ends_with('Z') || timestamp.contains('+') || timestamp.contains('-'));
+        assert!(timestamp.ends_with('Z'));
 
         // Should be valid RFC3339 format
         assert!(chrono::DateTime::parse_from_rfc3339(&timestamp).is_ok());

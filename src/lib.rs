@@ -201,6 +201,14 @@ pub fn initialize() -> Result<()> {
 ///
 /// Checks for required dependencies and system capabilities.
 /// 必要な依存関係とシステム機能をチェックします。
+///
+/// # Errors
+///
+/// Returns an error if:
+/// 以下の場合にエラーを返します：
+/// - Feature flag dependencies are inconsistent
+/// - Required system capabilities are missing
+/// - Environment configuration is invalid
 fn validate_environment() -> Result<()> {
     // Check Rust version compatibility
     // Rustバージョン互換性チェック
@@ -222,6 +230,42 @@ fn validate_environment() -> Result<()> {
         #[cfg(not(feature = "phase2"))]
         return Err(ZynapseError::Configuration {
             message: "Phase 3 requires Phase 2 features".to_string(),
+        });
+    }
+
+    // Validate system capabilities for TUI
+    // TUI用システム機能の検証
+    #[cfg(feature = "tui")]
+    {
+        if std::env::var("TERM").is_err() {
+            log::warn!("TERM environment variable not set, TUI functionality may be limited");
+        }
+    }
+
+    // Check for required directories permissions
+    // 必要なディレクトリの権限チェック
+    if let Some(home_dir) = dirs::home_dir() {
+        let zynapse_dir = home_dir.join(".zynapse");
+
+        // Try to create the directory if it doesn't exist
+        // ディレクトリが存在しない場合は作成を試行
+        if !zynapse_dir.exists() {
+            std::fs::create_dir_all(&zynapse_dir)
+                .map_err(|e| ZynapseError::io_error(e, "Failed to create Zynapse directory"))?;
+        }
+
+        // Verify write permissions
+        // 書き込み権限を確認
+        let test_file = zynapse_dir.join(".write_test");
+        std::fs::write(&test_file, "test")
+            .map_err(|e| ZynapseError::io_error(e, "No write permission to Zynapse directory"))?;
+
+        // Clean up test file
+        // テストファイルを削除
+        let _ = std::fs::remove_file(test_file);
+    } else {
+        return Err(ZynapseError::Configuration {
+            message: "Cannot determine home directory".to_string(),
         });
     }
 

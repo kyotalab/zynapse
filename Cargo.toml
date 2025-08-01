@@ -57,7 +57,7 @@ tantivy = { version = "0.22", optional = true }
 serde = { version = "1.0", features = ["derive"] }
 serde_yaml = "0.9"
 serde_json = "1.0"
-toml = "0.9.4"
+toml = "0.8"
 
 # Date/time handling - Timezone-aware timestamps
 chrono = { version = "0.4", features = ["serde"] }
@@ -69,7 +69,7 @@ anyhow = "1.0"
 # File system operations
 walkdir = "2.4"
 directories = "5.0"
-dirs = "6.0.0"
+dirs = "6.0"
 
 # Async runtime for I/O operations
 tokio = { version = "1.0", features = ["full"] }
@@ -79,7 +79,7 @@ pulldown-cmark = "0.10"
 
 # Cryptographic hashing for content deduplication
 blake3 = "1.5"
-hex = "0.4.3"
+hex = "0.4"
 
 # Configuration management
 config = "0.14"
@@ -229,6 +229,10 @@ return_self_not_must_use = "warn"
 similar_names = "allow"
 too_many_lines = "allow"
 module_name_repetitions = "allow"
+
+# Allow multiple crate versions during development phase
+# 開発フェーズでは複数のクレートバージョンを許可
+multiple_crate_versions = "allow"
 
 # Package metadata for distribution
 [package.metadata.docs.rs]
