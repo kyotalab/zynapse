@@ -1,6 +1,244 @@
 [package]
 name = "zynapse"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
+authors = ["Zynapse Development Team"]
+description = "CLI/TUI-based Zettelkasten tool with synapse-like knowledge connections"
+license = "MIT"
+repository = "https://github.com/kyotalab/zynapse"
+documentation = "https://docs.rs/zynapse"
+readme = "README.md"
+keywords = ["zettelkasten", "cli", "tui", "knowledge-management", "rust"]
+categories = ["command-line-utilities", "text-processing"]
 
+# Rust toolchain requirements
+# Rust 2021 edition for modern async/await and improved error handling
+rust-version = "1.70.0"
+
+# Feature flags for phase-based development
+# Phase 1: Basic CLI/TUI and core functionality
+# Phase 2: Advanced analytics and learning features
+# Phase 3: AI-powered emergence and serendipity
+[features]
+default = ["phase1"]
+phase1 = ["basic-storage", "search", "cli", "tui"]
+phase2 = ["phase1", "analytics", "learning", "visualization"]
+phase3 = ["phase2", "ai", "emergence", "serendipity"]
+
+# Core features
+basic-storage = []
+search = ["dep:tantivy"]
+cli = ["dep:clap"]
+tui = ["dep:ratatui", "dep:crossterm"]
+
+# Phase 2 features
+analytics = []
+learning = []
+visualization = ["dep:plotters"]
+
+# Phase 3 features (future)
+ai = []
+emergence = []
+serendipity = []
+
+# Core dependencies - Phase 1 MVP
 [dependencies]
+# CLI framework - Modern derive API with excellent UX
+clap = { version = "4.4", features = ["derive", "env", "color"] }
+
+# TUI framework - Modern terminal user interface
+ratatui = { version = "0.26", optional = true }
+crossterm = { version = "0.27", optional = true }
+
+# Search engine - High-performance full-text search
+tantivy = { version = "0.22", optional = true }
+
+# Serialization - Universal data interchange
+serde = { version = "1.0", features = ["derive"] }
+serde_yaml = "0.9"
+serde_json = "1.0"
+
+# Date/time handling - Timezone-aware timestamps
+chrono = { version = "0.4", features = ["serde"] }
+
+# Error handling - Structured error types with context
+thiserror = "1.0"
+anyhow = "1.0"
+
+# File system operations
+walkdir = "2.4"
+directories = "5.0"
+
+# Async runtime for I/O operations
+tokio = { version = "1.0", features = ["full"] }
+
+# Markdown processing
+pulldown-cmark = "0.10"
+
+# Cryptographic hashing for content deduplication
+blake3 = "1.5"
+
+# Configuration management
+config = "0.14"
+
+# Logging infrastructure
+log = "0.4"
+env_logger = "0.11"
+
+# UUID generation for unique identifiers
+uuid = { version = "1.0", features = ["v4", "serde"] }
+
+# Phase 2 dependencies (optional)
+plotters = { version = "0.3", optional = true }
+
+# Development dependencies for testing and benchmarking
+[dev-dependencies]
+# Testing framework
+tokio-test = "0.4"
+tempfile = "3.8"
+assert_cmd = "2.0"
+predicates = "3.0"
+
+# Property-based testing
+proptest = "1.4"
+
+# Benchmarking (for performance requirements validation)
+criterion = { version = "0.5", features = ["html_reports"] }
+
+# Test utilities
+serial_test = "3.0"
+
+# Binary targets
+[[bin]]
+name = "zynapse"
+path = "src/main.rs"
+required-features = ["cli"]
+
+# Library target with full documentation
+[lib]
+name = "zynapse"
+path = "src/lib.rs"
+crate-type = ["lib"]
+
+# Benchmark targets for performance validation
+[[bench]]
+name = "search_performance"
+harness = false
+required-features = ["search"]
+
+[[bench]]
+name = "storage_performance"
+harness = false
+required-features = ["basic-storage"]
+
+# Example binaries for documentation
+[[example]]
+name = "basic_usage"
+required-features = ["cli"]
+
+# Build optimization profiles
+[profile.dev]
+# Development profile - Fast compilation, good debugging
+opt-level = 0
+debug = true
+split-debuginfo = "unpacked"
+debug-assertions = true
+overflow-checks = true
+lto = false
+panic = "unwind"
+incremental = true
+codegen-units = 256
+rpath = false
+
+[profile.release]
+# Release profile - Maximum performance optimization
+opt-level = 3
+debug = false
+split-debuginfo = "packed"
+debug-assertions = false
+overflow-checks = false
+lto = "fat"      # Link-time optimization for CLI performance
+panic = "abort"  # Smaller binary size
+incremental = false
+codegen-units = 1
+rpath = false
+strip = true     # Remove debug symbols
+
+[profile.test]
+# Test profile - Balance between speed and debugging
+opt-level = 1
+debug = true
+debug-assertions = true
+overflow-checks = true
+
+[profile.bench]
+# Benchmark profile - Performance measurement
+opt-level = 3
+debug = false
+debug-assertions = false
+overflow-checks = false
+lto = true
+
+# Strict linting configuration for high code quality
+[lints.rust]
+# Enforce comprehensive documentation
+missing_docs = "deny"
+missing_debug_implementations = "warn"
+missing_copy_implementations = "warn"
+
+# Memory safety and security
+unsafe_code = "deny"
+unused_must_use = "deny"
+
+# Code quality
+dead_code = "warn"
+unused_imports = "warn"
+unused_variables = "warn"
+unreachable_code = "warn"
+
+# Performance considerations
+single_use_lifetimes = "warn"
+trivial_casts = "warn"
+trivial_numeric_casts = "warn"
+
+[lints.clippy]
+# High-level linting categories
+all = "deny"
+pedantic = "warn"
+nursery = "warn"
+cargo = "warn"
+
+# Specific important lints
+missing_errors_doc = "deny"
+missing_panics_doc = "deny"
+missing_safety_doc = "deny"
+
+# Performance-critical lints for CLI responsiveness
+inefficient_to_string = "deny"
+string_add = "deny"
+string_add_assign = "deny"
+
+# API design lints
+must_use_candidate = "warn"
+return_self_not_must_use = "warn"
+
+# Allow certain pedantic lints that may be too restrictive during development
+similar_names = "allow"
+too_many_lines = "allow"
+module_name_repetitions = "allow"
+
+# Package metadata for distribution
+[package.metadata.docs.rs]
+# Documentation generation with all features
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+# Cross-platform compatibility
+[target.'cfg(windows)'.dependencies]
+# Windows-specific dependencies if needed
+
+[target.'cfg(unix)'.dependencies]
+# Unix-specific dependencies if needed
+
+[target.'cfg(target_os = "macos")'.dependencies]
+# macOS-specific dependencies if needed
