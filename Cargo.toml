@@ -44,7 +44,7 @@ serendipity = []
 # Core dependencies - Phase 1 MVP
 [dependencies]
 # CLI framework - Modern derive API with excellent UX
-clap = { version = "4.4", features = ["derive", "env", "color"] }
+clap = { version = "4.4", optional = true, features = ["derive", "env", "color"] }
 
 # TUI framework - Modern terminal user interface
 ratatui = { version = "0.26", optional = true }
