@@ -17,6 +17,7 @@ use std::path::PathBuf;
 /// organized by functional areas.
 /// この構造体は機能領域別に整理されたZynapseのすべての設定オプションを含みます。
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct Config {
     /// Storage configuration
     /// ストレージ設定
@@ -185,24 +186,6 @@ pub struct LoggingConfig {
     pub colored: bool,
 }
 
-impl Default for Config {
-    fn default() -> Self {
-        Self {
-            storage: StorageConfig::default(),
-
-            #[cfg(feature = "search")]
-            search: SearchConfig::default(),
-
-            #[cfg(feature = "cli")]
-            cli: CliConfig::default(),
-
-            #[cfg(feature = "tui")]
-            tui: TuiConfig::default(),
-
-            logging: LoggingConfig::default(),
-        }
-    }
-}
 
 impl Default for StorageConfig {
     fn default() -> Self {
@@ -351,11 +334,11 @@ impl Config {
     /// ファイルが読み取れないまたは解析できない場合にエラーを返します。
     pub fn load_from_file(path: &std::path::Path) -> Result<Self> {
         let content = std::fs::read_to_string(path).map_err(|e| {
-            ZynapseError::io_error(e, format!("Failed to read config file: {:?}", path))
+            ZynapseError::io_error(e, format!("Failed to read config file: {path:?}"))
         })?;
 
         let config: Self = toml::from_str(&content).map_err(|e| {
-            ZynapseError::config_error(format!("Invalid TOML in config file: {}", e))
+            ZynapseError::config_error(format!("Invalid TOML in config file: {e}"))
         })?;
 
         config.validate()?;
@@ -390,11 +373,11 @@ impl Config {
         }
 
         let content = toml::to_string(self).map_err(|e| {
-            ZynapseError::config_error(format!("Failed to serialize config: {}", e))
+            ZynapseError::config_error(format!("Failed to serialize config: {e}"))
         })?;
 
         std::fs::write(path, content).map_err(|e| {
-            ZynapseError::io_error(e, format!("Failed to write config file: {:?}", path))
+            ZynapseError::io_error(e, format!("Failed to write config file: {path:?}"))
         })?;
 
         Ok(())

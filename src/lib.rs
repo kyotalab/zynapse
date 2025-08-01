@@ -151,7 +151,8 @@ pub const DESCRIPTION: &str = env!("CARGO_PKG_DESCRIPTION");
 /// let version = version_info();
 /// assert!(version.contains("zynapse"));
 /// ```
-#[must_use] pub fn version_info() -> String {
+#[must_use]
+pub fn version_info() -> String {
     format!("{NAME} {VERSION} - {DESCRIPTION}")
 }
 
