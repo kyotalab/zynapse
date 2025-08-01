@@ -203,10 +203,10 @@ trivial_numeric_casts = "warn"
 
 [lints.clippy]
 # High-level linting categories
-all = "deny"
-pedantic = "warn"
-nursery = "warn"
-cargo = "warn"
+all = { level = "deny", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+nursery = { level = "warn", priority = -1 }
+cargo = { level = "warn", priority = -1 }
 
 # Specific important lints
 missing_errors_doc = "deny"
